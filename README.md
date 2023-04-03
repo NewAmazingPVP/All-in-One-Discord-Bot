@@ -1,4 +1,4 @@
-# All-in-One-Discord-Bot
+# All-in-One Discord Bot
 A multipurpose discord bot
 
 
