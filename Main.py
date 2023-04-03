@@ -17,33 +17,29 @@ async def on_message(message):
         return
 
     if message.content.startswith('weather'):
-        try:
-            # get city name from user input
-            city = message.content.split()[1]
+        # get city name from user input
+        city = message.content.split()[1]
 
-            # set up API request
-            url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={Key.API_KEY}"
-            response = requests.get(url)
-            data = response.json()
+        # API request
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={Key.API_KEY}"
+        response = requests.get(url)
+        data = response.json()
 
-            # extract weather data
-            weather = data['weather'][0]['description']
-            temp = data['main']['temp'] - 273.15
-            humidity = data['main']['humidity']
-            wind = data['wind']['speed']
-            sunrise = data['sys']['sunrise']
+        # extract weather data
+        weather = data['weather'][0]['description']
+        temp = data['main']['temp'] - 273.15
+        humidity = data['main']['humidity']
+        wind = data['wind']['speed']
+        sunrise = data['sys']['sunrise']
 
-            # format sunrise time
-            sunrise_time = datetime.fromtimestamp(sunrise).strftime("%H:%M")
+        # format sunrise time
+        sunrise_time = datetime.fromtimestamp(sunrise).strftime("%H:%M")
 
-            # create output message
-            output = f"Weather in {city}: {weather}\nTemperature: {temp:.2f}°C\nHumidity: {humidity}%\nWind Speed: {wind}m/s\nSunrise: {sunrise_time} EST"
+        # create output message
+        output = f"Weather in {city}: {weather}\nTemperature: {temp:.2f}°C\nHumidity: {humidity}%\nWind Speed: {wind}m/s\nSunrise: {sunrise_time} EST"
 
-            # send message to discord
-            await message.channel.send(output)
+        # send message to discord
+        await message.channel.send(output)
 
-        except IndexError:
-            # if user did not enter a city name
-            await message.channel.send("Please enter a city name after the /weather command.")
 
 client.run(Key.TOKEN)
