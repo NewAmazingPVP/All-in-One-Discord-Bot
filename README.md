@@ -9,10 +9,9 @@ A multipurpose discord bot
 
 - Image Generation
 
-# Planned Features to add
-
-
 - Music
+
+# Planned Features to add
 
 - Poll
 
@@ -39,3 +38,5 @@ A multipurpose discord bot
 - Timer
 
 - Minecraft 
+
+- And a lot more...
