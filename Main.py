@@ -8,6 +8,8 @@ import requests
 import io
 import base64
 from PIL import Image, PngImagePlugin
+import pytube
+import os
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -23,17 +25,14 @@ async def weather_command(ctx, city: str):
     response = requests.get(url)
     data = response.json()
 
-    # extract weather data
     weather = data['weather'][0]['description']
     temp = data['main']['temp'] - 273.15
     humidity = data['main']['humidity']
     wind = data['wind']['speed']
     sunrise = data['sys']['sunrise']
 
-    # format sunrise time
     sunrise_time = datetime.fromtimestamp(sunrise).strftime("%H:%M")
 
-    # create output message
     output = f"Weather in {city}: {weather}\nTemperature: {temp:.2f}°C\nHumidity: {humidity}%\nWind Speed: {wind}m/s\nSunrise: {sunrise_time} EST"
 
     await ctx.response.send_message(output)
@@ -69,6 +68,38 @@ async def draw_command(ctx, art: str):
         file = discord.File(f, filename='output.png')    
     
     await ctx.channel.send(file=file)    
+    
+@tree.command(name="play", description="Play a music!", guild=(discord.Object(id=Key.GUILD)))
+async def play(ctx, url: str):
+    await ctx.response.send_message("Playing music...", delete_after=5)
+    channel = ctx.user.voice.channel if ctx.user.voice else None
+    if not channel:
+        await ctx.channel.send("You are not connected to a voice channel.")
+        return
+    video = pytube.YouTube(url)
+    audio_stream = video.streams.filter(only_audio=True).first()
+    audio_file = audio_stream.download(output_path='downloads')
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(audio_file))
+    voice_client = await channel.connect()
+    voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+    await ctx.channel.send(f'Playing {video.title}')
+    
+@tree.command(name="stop", description="Stop the music", guild=(discord.Object(id=Key.GUILD)))
+async def stop(ctx):
+    voice_client = ctx.guild.voice_client
+    if not voice_client:
+        await ctx.channel.send("I am not currently in a voice channel.")
+        return
+    await voice_client.disconnect()
+    await ctx.response.send_message("Music stopped.")
+    for file_name in os.listdir("downloads"):
+        file_path = os.path.join("downloads", file_name)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception as e:
+            print(f"Error deleting {file_path}: {e}")
+
 
 @client.event
 async def on_ready():
