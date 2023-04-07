@@ -5,8 +5,10 @@ A multipurpose discord bot
 # Current Features
 - Weather Info
 
-# Planned Features to add
 - Slash Commands
+
+# Planned Features to add
+
 
 - Music
 
