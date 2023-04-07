@@ -7,6 +7,8 @@ A multipurpose discord bot
 
 - Slash Commands
 
+- Image Generation
+
 # Planned Features to add
 
 
@@ -35,7 +37,5 @@ A multipurpose discord bot
 - Quotes
 
 - Timer
-
-- Image Generation
 
 - Minecraft 
