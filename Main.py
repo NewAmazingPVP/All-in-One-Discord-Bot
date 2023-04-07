@@ -16,7 +16,7 @@ tree = app_commands.CommandTree(client)
 url = "http://127.0.0.1:7860"
 
 @tree.command(name="weather", description="Get weather of any city!")
-async def first_command(ctx, city: str):
+async def weather_command(ctx, city: str):
 
     # API request
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={Key.API_KEY}"
@@ -38,9 +38,11 @@ async def first_command(ctx, city: str):
 
     await ctx.response.send_message(output)
 
-@tree.command(name="art", description="Draw anything you imagine!")
-async def second_command(ctx, art: str):
+@tree.command(name="draw", description="Draw anything you imagine!")
+async def draw_command(ctx, art: str):
                 
+    await ctx.response.send_message("Generating image, please wait...")
+
     payload = {
         "prompt": art,
         "steps": 25,
@@ -66,12 +68,11 @@ async def second_command(ctx, art: str):
     with open('output.png', 'rb') as f:
         file = discord.File(f, filename='output.png')    
     
-    await ctx.response.send_message(file=file)    
-
+    await ctx.channel.send(file=file)    
 
 @client.event
 async def on_ready():
-    await tree.sync()
+    await tree.sync(guild=discord.Object(id=Key.GUILD))
     print("Ready!")
 
 client.run(Key.TOKEN)
