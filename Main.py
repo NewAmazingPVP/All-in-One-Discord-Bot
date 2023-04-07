@@ -38,10 +38,10 @@ async def weather_command(ctx, city: str):
 
     await ctx.response.send_message(output)
 
-@tree.command(name="draw", description="Draw anything you imagine!")
+@tree.command(name="art", description="Draw anything you imagine!")
 async def draw_command(ctx, art: str):
                 
-    await ctx.response.send_message("Generating image, please wait...")
+    await ctx.response.send_message("Generating image, please wait...", delete_after=5)
 
     payload = {
         "prompt": art,
