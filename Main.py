@@ -8,7 +8,7 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-@tree.command(name="weather", description="My first application Command", guild=discord.Object(id=Key.GUILD))
+@tree.command(name="weather", description="Get weather of any city!")
 async def first_command(ctx, city: str):
 
     # API request
@@ -29,11 +29,11 @@ async def first_command(ctx, city: str):
     # create output message
     output = f"Weather in {city}: {weather}\nTemperature: {temp:.2f}°C\nHumidity: {humidity}%\nWind Speed: {wind}m/s\nSunrise: {sunrise_time} EST"
 
-    await ctx.channel.send(output)
+    await ctx.response.send_message(output)
 
 @client.event
 async def on_ready():
-    await tree.sync(guild=discord.Object(id=Key.GUILD))
+    await tree.sync()
     print("Ready!")
 
 client.run(Key.TOKEN)
