@@ -54,7 +54,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-
+cookies.json
+output_images/
+responses.db
 # Translations
 *.mo
 *.pot
