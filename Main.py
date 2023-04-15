@@ -84,8 +84,12 @@ async def play(ctx, url: str):
     if not channel:
         await ctx.response.send_message("You are not connected to a voice channel.")
         return
-    await ctx.response.send_message("Playing music...")
-    video = pytube.YouTube(url)
+    try:
+        video = pytube.YouTube(url)
+    except pytube.exceptions.RegexMatchError:
+        await ctx.response.send_message("Invalid YouTube URL.")
+        return
+    await ctx.response.send_message("Playing music...", delete_after=2)
     audio_stream = video.streams.filter(only_audio=True).first()
     audio_file = audio_stream.download(output_path='downloads')
     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(audio_file))
