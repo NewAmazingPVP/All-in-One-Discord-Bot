@@ -11,6 +11,8 @@ A multipurpose discord bot
 
 - Music
 
+- Chatbot
+
 # Planned Features to add
 
 - Poll
@@ -28,8 +30,6 @@ A multipurpose discord bot
 - Trivia
 
 - Moderation
-
-- Chatbot
 
 - Fun Facts
 

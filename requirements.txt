@@ -1,0 +1,9 @@
+datetime
+discord
+requests
+Key
+Pillow
+pytube
+revChatGPT
+asyncio
+EdgeGPT

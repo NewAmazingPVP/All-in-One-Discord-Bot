@@ -6,10 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-Key.py
-
-Output.png
-
 # Distribution / packaging
 .Python
 build/
@@ -57,6 +53,8 @@ cover/
 cookies.json
 output_images/
 responses.db
+Key.py
+Output.png
 # Translations
 *.mo
 *.pot
