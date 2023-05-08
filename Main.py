@@ -5,7 +5,6 @@ import Key
 import requests
 import pytube
 import os
-from revChatGPT.V1 import Chatbot as RevChatbot
 from ImageGen import ImageGen
 from EdgeGPT import Chatbot, ConversationStyle
 import requests
@@ -16,13 +15,7 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-url = "http://127.0.0.1:7860"
-
 bot = Chatbot(cookiePath='./cookies.json')
-
-chatbot = RevChatbot(config={
-  "access_token": Key.ACCESS_TOKEN,
-})
 
 ig = ImageGen(auth_cookie= Key.AUTH_COOKIE)
 
@@ -73,7 +66,7 @@ async def weather_command(ctx, city: str):
     else:
         wind_dir = "NW"
 
-    output = f"Weather in {city}: {weather}\nTemperature: {temp_c:.2f}°C / {temp_f:.2f}°F\nFeels like: {feels_like_c:.2f}°C / {feels_like_f:.2f}°F\nMin Temperature: {temp_min_c:.2f}°C / {temp_min_f:.2f}°F\nMax Temperature: {temp_max_c:.2f}°C / {temp_max_f:.2f}°F\nHumidity: {humidity}%\nWind Speed: {wind_speed}m/s\nWind Direction: {wind_dir} ({wind_deg}°)\nClouds: {clouds}%\nPressure:{pressure}hPa\nVisibility: {visibility_km:.2f}km / {visibility_m:.2f}mi\nSunrise: {sunrise_time} EST\nSunset: {sunset_time} EST"
+    output = f"Weather in {city}: {weather}\nTemperature: {temp_c:.2f}\u00b0C / {temp_f:.2f}\u00b0F\nFeels like: {feels_like_c:.2f}\u00b0C / {feels_like_f:.2f}\u00b0F\nMin Temperature: {temp_min_c:.2f}\u00b0C / {temp_min_f:.2f}\u00b0F\nMax Temperature: {temp_max_c:.2f}\u00b0C / {temp_max_f:.2f}\u00b0F\nHumidity: {humidity}%\nWind Speed: {wind_speed}m/s\nWind Direction: {wind_dir} ({wind_deg}\u00b0)\nClouds: {clouds}%\nPressure:{pressure}hPa\nVisibility: {visibility_km:.2f}km / {visibility_m:.2f}mi\nSunrise: {sunrise_time} EST\nSunset: {sunset_time} EST"
 
     await ctx.response.send_message(output)
 
@@ -153,18 +146,7 @@ async def stop(ctx):
                 os.unlink(file_path)
         except Exception as e:
             print(f"Error deleting {file_path}: {e}")
-            
-@tree.command(name="chat", description="Chat with a bot")
-async def chat(ctx, message: str):
-    prompt = message
-    response = ""
-
-    user_prompt = "**" + str(ctx.user) + "**: " + str(prompt) 
-    await ctx.response.send_message(user_prompt + "\n Responding...")
-    for data in chatbot.ask(prompt):
-        response = data["message"]
-
-    await ctx.edit_original_response(content=user_prompt + '\n' + response)
+        
 
 @client.event
 async def on_ready():
